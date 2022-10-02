@@ -1,0 +1,124 @@
+public static void main(String [] args){
+
+        Scanner reader = new Scanner(System.in);
+        ArrayList<Integer> litersList = new ArrayList<>();
+
+        int tests = reader.nextInt();
+        reader.nextLine();
+
+        for (int i = 0; i < tests; i++) {
+
+            litersList.removeAll(litersList);
+
+            String barrelsAndPours = reader.nextLine();
+            String liters = reader.nextLine();
+
+            String[] amountOfBarrelsAndPours = barrelsAndPours.split(" ");
+            String[] litersArray = liters.split(" ");
+
+
+            for (int j = 0; j < litersArray.length; j++) {
+                litersList.add(Integer.parseInt(litersArray[j]));
+            }
+
+            divideArrayElements(litersList,0, litersList.size() - 1);
+            litersList = reverseArrayList(litersList);
+
+            int number = 0;
+            int count = 0;
+
+            for (int j = 0; j <= Integer.parseInt(amountOfBarrelsAndPours[1]); j++) {
+                number += litersList.get(j);
+            }
+
+            System.out.println(number);
+        }
+    }
+
+    public static ArrayList<Integer> reverseArrayList(ArrayList<Integer> alist)
+    {
+        // Arraylist for storing reversed elements
+        ArrayList<Integer> revArrayList = new ArrayList<Integer>();
+        for (int i = alist.size() - 1; i >= 0; i--) {
+
+            // Append the elements in reverse order
+            revArrayList.add(alist.get(i));
+        }
+
+        // Return the reversed arraylist
+        return revArrayList;
+    }
+
+    public static void divideArrayElements(ArrayList<Integer> arrayToSort, int indexStart, int indexEnd) {
+
+        if (indexStart < indexEnd && (indexEnd - indexStart) >= 1) {
+            int middleElement = (indexEnd + indexStart) / 2;
+
+            divideArrayElements(arrayToSort, indexStart, middleElement);
+            divideArrayElements(arrayToSort, middleElement + 1, indexEnd);
+
+            mergeArrayElements(arrayToSort, indexStart, middleElement, indexEnd);
+        }
+    }
+
+    public static void mergeArrayElements(ArrayList<Integer> arrayToSort, int indexStart, int indexMiddle, int indexEnd) {
+
+        ArrayList<Integer> tempArray = new ArrayList<>();
+
+        int getLeftIndex = indexStart;
+        int getRightIndex = indexMiddle + 1;
+
+        while (getLeftIndex <= indexMiddle && getRightIndex <= indexEnd) {
+
+            if (arrayToSort.get(getLeftIndex) <= arrayToSort.get(getRightIndex)) {
+
+                tempArray.add(arrayToSort.get(getLeftIndex));
+                getLeftIndex++;
+
+            } else {
+
+                tempArray.add(arrayToSort.get(getRightIndex));
+                getRightIndex++;
+
+            }
+        }
+
+        while (getLeftIndex <= indexMiddle) {
+            tempArray.add(arrayToSort.get(getLeftIndex));
+            getLeftIndex++;
+        }
+
+        while (getRightIndex <= indexEnd) {
+            tempArray.add(arrayToSort.get(getRightIndex));
+            getRightIndex++;
+        }
+
+
+        for (int i = 0; i < tempArray.size(); indexStart++) {
+            arrayToSort.set(indexStart, tempArray.get(i++));
+
+        }
+
+    }
+
+    private static void sortIntegerArrayInsertion(ArrayList<Integer> arrayList) {
+
+        // El puntero rojo me va a ir hasta el final del array
+        // La posición del verde va a ser el anterior al rojo, vamos a verificarlo de derecha a izquierda.
+        for (int rojo = 1; rojo < arrayList.size(); rojo++) {
+            int valorRojo = arrayList.get(rojo);
+            int verde = rojo - 1;
+
+            // El while se va a hacer mientras el valor del rojo sea menor al valor del verde
+            // el verde disminuye cada vez -1, entonces cuando el rojo sea mayor al verde, es decir,
+            // que allí debe ser reemplazado, para. Todo esto meintras el verde sea mayor a -1
+            while (verde > -1 && valorRojo <= arrayList.get(verde)) {
+                int valorVerde = arrayList.get(verde);
+                arrayList.set(verde + 1, valorVerde);
+                verde -= 1;
+            }
+            arrayList.set(verde + 1, valorRojo);
+        }
+
+    }
+}
